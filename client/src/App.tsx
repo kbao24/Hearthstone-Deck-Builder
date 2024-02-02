@@ -1,35 +1,44 @@
-import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { useState } from 'react';
 import './App.css';
 
-export default function App() {
-  const [serverData, setServerData] = useState('');
+const cardList = [
+  // Your list of cards with details like name, image, etc.
+  { id: 1, name: 'Card 1', image: 'card1.jpg' },
+  { id: 2, name: 'Card 2', image: 'card2.jpg' },
+  // Add more cards as needed
+];
 
-  useEffect(() => {
-    async function readServerData() {
-      const resp = await fetch('/api/hello');
-      const data = await resp.json();
+const DeckBuilder = () => {
+  const [selectedCards, setSelectedCards] = useState([]);
 
-      console.log('Data from server:', data);
-
-      setServerData(data.message);
-    }
-
-    readServerData();
-  }, []);
+  const handleCardSelect = (card) => {
+    setSelectedCards([...selectedCards, card]);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="deck-builder">
+      <div className="card-list">
+        {cardList.map((card) => (
+          <div
+            key={card.id}
+            className="card"
+            onClick={() => handleCardSelect(card)}>
+            <img src={card.image} alt={card.name} />
+            <p>{card.name}</p>
+          </div>
+        ))}
       </div>
-      <h1>{serverData}</h1>
-    </>
+      <div className="selected-cards">
+        <h2>Selected Cards</h2>
+        {selectedCards.map((selectedCard) => (
+          <div key={selectedCard.id} className="selected-card">
+            <img src={selectedCard.image} alt={selectedCard.name} />
+            <p>{selectedCard.name}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
-}
+};
+
+export default DeckBuilder;
